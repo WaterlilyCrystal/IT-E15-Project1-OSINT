@@ -1,30 +1,29 @@
 package Project1.datagetting;
 
-import org.json.JSONObject;
+import java.util.StringJoiner;
 
 public class UserProfile {
     private String name;
-    private int score;
     private String userId;
+    private String socialAccount;
     private int gender;
+    private int score;
     private int comments;
     private int followers;
     private int followings;
     private int createdPosts;
-    private String socialAccount;
 
-    // Constructor
-    //Name	UserId	Social Account	Gender	Score	Comments count	Followers	Followings	Posts count
-    public UserProfile(String name, String userId, String socialAccount,  int gender, int score,  int comments, int followers, int followings, int createdPosts) {
+
+    public UserProfile(String name, String userId, String socialAccount, int gender, int score, int comments, int followers, int followings, int createdPosts) {
         this.name = name;
-        this.score = score;
         this.userId = userId;
+        this.socialAccount = socialAccount;
         this.gender = gender;
+        this.score = score;
         this.comments = comments;
         this.followers = followers;
         this.followings = followings;
         this.createdPosts = createdPosts;
-        this.socialAccount = socialAccount;
     }
 
     // Getters
@@ -60,22 +59,33 @@ public class UserProfile {
         return createdPosts;
     }
 
+
     public String getSocialAccount() {
         return socialAccount;
     }
+    // Method to convert UserProfile to CSV string
 
-    // Convert to JSONObject
-    public JSONObject toJSON() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", name);
-        jsonObject.put("score", score);
-        jsonObject.put("userId", userId);
-        jsonObject.put("gender", gender);
-        jsonObject.put("comments", comments);
-        jsonObject.put("followers", followers);
-        jsonObject.put("followings", followings);
-        jsonObject.put("createdPosts", createdPosts);
-        jsonObject.put("socialAccount", socialAccount);
-        return jsonObject;
+    public String toCSV() {
+        StringJoiner joiner = new StringJoiner(",");
+        joiner.add(escapeString(name));
+        joiner.add(escapeString(userId));
+        joiner.add(escapeString(socialAccount));
+        joiner.add(Integer.toString(gender));
+        joiner.add(Integer.toString(score));
+        joiner.add(Integer.toString(comments));
+        joiner.add(Integer.toString(followers));
+        joiner.add(Integer.toString(followings));
+        joiner.add(Integer.toString(createdPosts));
+        return joiner.toString();
+    }
+
+    // Method to escape special characters in a CSV field
+    private String escapeString(String value) {
+        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return value;
     }
 }
+
+
